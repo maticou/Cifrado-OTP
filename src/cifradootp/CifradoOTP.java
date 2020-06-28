@@ -15,14 +15,16 @@ import java.util.Scanner;
  */
 public class CifradoOTP {
     
-    static ArrayList<Character> textoOriginal;
+    static ArrayList<Character> listaTextoOriginal;
+    static ArrayList<Integer> listaTextoBinario;
+    static ArrayList<Integer> listaTextoCifrado;
+    static ArrayList<Integer> llave;
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here     
-        textoOriginal = new ArrayList<>();
+        // TODO code application logic here             
         
         while(true){
             Scanner in = new Scanner(System.in);
@@ -30,6 +32,11 @@ public class CifradoOTP {
             System.out.print("\n1.- Cifrar texto \n");
             System.out.print("2.- Descifrar texto \n");
             System.out.print("3.- Salir \n");
+            
+            listaTextoOriginal = new ArrayList<>();
+            listaTextoBinario = new ArrayList<>();
+            listaTextoCifrado = new ArrayList<>();
+            llave = new ArrayList<>();
             
             if(in.hasNextInt()){
                 int opcion = in.nextInt();  
@@ -55,23 +62,90 @@ public class CifradoOTP {
     private static void cifrar() {
         String texto = "";        
         Scanner text = new Scanner(System.in);
-        System.out.println("Ingrese el texto a cifrar (SOLO SE PERMITEN LETRAS DEL ALFABETO INGLÉS EN MAYÚSCULA Y MINÚSCULA): ");
+        System.out.println("\nIngrese la palabra a cifrar (SOLO SE PERMITEN CARACTERES ASCII IMPRIMIBLES DEL 32 AL 126):\n(Para saber cuales son dichos caracteres, diríjase a esta página: https://theasciicode.com.ar/)\n");
         if(text.hasNextLine()){
             texto = text.nextLine();
             for (char c : texto.toCharArray()) {
-                if((c>64 && c<91) || (c>96 && c<123)){
-                    textoOriginal.add(c);
+                if((c>31 && c<127)){
+                    listaTextoOriginal.add(c);
                 }else{
-                    System.out.println("\nINGRESE UN TEXTO CON LETRAS VÁLIDAS!!!\n");
+                    System.out.println("\nINGRESE UNA PALABRA CON LETRAS VÁLIDAS!!!\n");
                     break;
                 }                
             }
+            listaTextoBinario = new TextoABinario(listaTextoOriginal).getTextoBinary();
+            llave = new GeneradorDeLlave(listaTextoBinario.size()).getKey();
+            listaTextoCifrado = new CifrarTexto(llave, listaTextoBinario).getEncryptedText();
+            
+            
+            System.out.print("\nTexto en Binario: "); 
+            for(int j=0;j<listaTextoBinario.size();j++){
+                System.out.print(listaTextoBinario.get(j));          
+            }  
+            System.out.print("\n");
+            System.out.print("Llave generada:   "); 
+            for(int k=0;k<llave.size();k++){
+                System.out.print(llave.get(k));          
+            }
+            System.out.print("\n");
+            System.out.print("Texto cifrado:    "); 
+            for(int l=0;l<listaTextoCifrado.size();l++){
+                System.out.print(listaTextoCifrado.get(l));          
+            }
         }else{
-            System.out.println("\nINGRESE UN TEXTO VÁLIDO!!!\n");
+            System.out.println("\nINGRESE UNA PALABRA VÁLIDO!!!\n");
         }        
     }
 
     private static void descifrar() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String textoCifrado = "";        
+        Scanner text = new Scanner(System.in);
+        System.out.println("\nIngrese el texto cifrado (SOLO SE PERMITE EL TEXTO EN BINARIO)");
+        
+        if(text.hasNextLine()){
+            textoCifrado = text.nextLine();
+            for (char c : textoCifrado.toCharArray()) {
+                if(c == 48){
+                    listaTextoCifrado.add(0);
+                }
+                else if(c == 49){
+                    listaTextoCifrado.add(1);
+                }             
+            }
+            
+            String textoLlave = "";        
+            Scanner textKey = new Scanner(System.in);
+            System.out.println("\nIngrese la llave (SOLO SE PERMITE LA LLAVE EN BINARIO)");
+            
+            if(textKey.hasNextLine()){
+                textoLlave = textKey.nextLine();
+                for (char c : textoLlave.toCharArray()) {
+                    if(c == 48){
+                        llave.add(0);
+                    }
+                    else if(c == 49){
+                        llave.add(1);
+                    }             
+                }
+                
+                /*listaTextoBinario = new TextoABinario(listaTextoOriginal).getTextoBinary();
+                llave = new GeneradorDeLlave(listaTextoBinario.size()).getKey();
+
+
+                System.out.print("\nTexto en Binario: "); 
+                for(int j=0;j<listaTextoBinario.size();j++){
+                    System.out.print(listaTextoBinario.get(j));          
+                }  
+                System.out.print("\n");
+                System.out.print("Llave generada:   "); 
+                for(int k=0;k<llave.size();k++){
+                    System.out.print(llave.get(k));          
+                }*/
+            }else{
+                System.out.println("\nINGRESE UNA PALABRA VÁLIDO!!!\n");
+            }                                     
+        }else{
+            System.out.println("\nINGRESE UNA PALABRA VÁLIDO!!!\n");
+        }  
     }
 }
