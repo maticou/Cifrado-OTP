@@ -16,6 +16,7 @@ import java.util.Scanner;
 public class CifradoOTP {
     
     static ArrayList<Character> listaTextoOriginal;
+    static ArrayList<Character> listaTextoDescifrado;
     static ArrayList<Integer> listaTextoBinario;
     static ArrayList<Integer> listaTextoCifrado;
     static ArrayList<Integer> llave;
@@ -28,12 +29,13 @@ public class CifradoOTP {
         
         while(true){
             Scanner in = new Scanner(System.in);
-            System.out.println("Elija el número de la acción a realizar: ");
+            System.out.println("\nElija el número de la acción a realizar: ");
             System.out.print("\n1.- Cifrar texto \n");
             System.out.print("2.- Descifrar texto \n");
             System.out.print("3.- Salir \n");
             
             listaTextoOriginal = new ArrayList<>();
+            listaTextoDescifrado = new ArrayList<>();
             listaTextoBinario = new ArrayList<>();
             listaTextoCifrado = new ArrayList<>();
             llave = new ArrayList<>();
@@ -73,15 +75,12 @@ public class CifradoOTP {
                     break;
                 }                
             }
+            
             listaTextoBinario = new TextoABinario(listaTextoOriginal).getTextoBinary();
             llave = new GeneradorDeLlave(listaTextoBinario.size()).getKey();
             listaTextoCifrado = new CifrarTexto(llave, listaTextoBinario).getEncryptedText();
             
             
-            System.out.print("\nTexto en Binario: "); 
-            for(int j=0;j<listaTextoBinario.size();j++){
-                System.out.print(listaTextoBinario.get(j));          
-            }  
             System.out.print("\n");
             System.out.print("Llave generada:   "); 
             for(int k=0;k<llave.size();k++){
@@ -128,19 +127,12 @@ public class CifradoOTP {
                     }             
                 }
                 
-                /*listaTextoBinario = new TextoABinario(listaTextoOriginal).getTextoBinary();
-                llave = new GeneradorDeLlave(listaTextoBinario.size()).getKey();
-
-
-                System.out.print("\nTexto en Binario: "); 
-                for(int j=0;j<listaTextoBinario.size();j++){
-                    System.out.print(listaTextoBinario.get(j));          
-                }  
-                System.out.print("\n");
-                System.out.print("Llave generada:   "); 
-                for(int k=0;k<llave.size();k++){
-                    System.out.print(llave.get(k));          
-                }*/
+                listaTextoDescifrado = new DescifradoOTP(llave, listaTextoCifrado).getDecryptedText();
+                
+                System.out.print("\nTexto descifrado: "); 
+                for(int j=0;j<listaTextoDescifrado.size();j++){
+                    System.out.print(listaTextoDescifrado.get(j));          
+                }
             }else{
                 System.out.println("\nINGRESE UNA PALABRA VÁLIDO!!!\n");
             }                                     
