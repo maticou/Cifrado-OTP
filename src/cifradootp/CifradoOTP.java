@@ -64,15 +64,15 @@ public class CifradoOTP {
     private static void cifrar() {
         String texto = "";        
         Scanner text = new Scanner(System.in);
-        System.out.println("\nIngrese la palabra a cifrar (SOLO SE PERMITEN CARACTERES ASCII IMPRIMIBLES DEL 32 AL 126):\n(Para saber cuales son dichos caracteres, diríjase a esta página: https://theasciicode.com.ar/)\n");
+        System.out.println("\nIngrese la palabra a cifrar (SOLO SE PERMITEN LAS LETRAS MAYÚSCULAS Y MINÚSCULAS MÁS EL ESPACIO):\n(Para saber cuales son dichos caracteres, diríjase a esta página: https://theasciicode.com.ar/)\n");
         if(text.hasNextLine()){
             texto = text.nextLine();
             for (char c : texto.toCharArray()) {
-                if((c>31 && c<127)){
+                if((c>31 && c<33) || (c>64 && c<91) || (c>96 && c<123)){
                     listaTextoOriginal.add(c);
                 }else{
                     System.out.println("\nINGRESE UNA PALABRA CON LETRAS VÁLIDAS!!!\n");
-                    break;
+                    exit(0);
                 }                
             }
             
